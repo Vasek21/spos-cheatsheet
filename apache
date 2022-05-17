@@ -51,3 +51,46 @@ tcp6       0      0 :::8282                 :::*                    NASLOUCHÁ  
 
 # Vraci spravna data?
 curl 10.0.1.40:8181
+
+
+LOAD BALANCER
+mkdir /etc/apache2/ssl
+cd /etc/apache2/ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout spos.key -out spos.crt
+
+CZ
+Czech Republic
+Pilsen
+ZCU
+FAV
+mail.test.spos
+webmaster@mail.test.spos
+
+cp /etc/apache2/sites-available/default-ssl.conf etc/apache2/sites-available/proxy.conf
+
+<VirtualHost _default_:443>
+  ServerName test.spos
+  SSLCertificateFile /etc/apache2/ssl/spos.crt
+  SSLCertificateKeyFile /etc/apache2/ssl/spos.key
+  <Proxy balancer://test.spos>
+    BalancerMember http://10.0.1.40:8181
+    BalancerMember http://10.0.1.40:8282
+  ProxySet lbmethod=byrequests
+  </Proxy>
+  ProxyPass / balancer://test.spos/
+  ProxyPassReverse / balancer://test.spos/
+</VirtualHost>
+
+#Milion cmndů
+a2enmod ssl
+a2ensite default-ssl.conf
+a2enmod proxy
+a2enmod proxy_balancer
+a2enmod proxy_http
+a2enmod lbmethod_byrequests
+
+service apache2 restart
+
+Kontrola
+nestat -tupln | grep apache
+curl --insecure https://10.0.0.15 -> meni se obsah
