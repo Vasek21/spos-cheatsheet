@@ -1,0 +1,49 @@
+Nastavte v linuxu raid5 ze všech dostupných disků.
+
+Vytváření
+-----------
+apt install mdadm
+mdadm -Cv /dev/md0 -l5 -n3 /dev/sd[bcd]
+mdadm --detail /dev/md0
+
+
+----------
+Mazání
+-------
+lvremove sources
+vgremove data
+cat /proc/mdstat
+
+mdadm --stop /dev/md0
+mdadm --remove /dev/md0
+mdadm --zero-superblock /dev/sd[b,c,d]
+
+Vytvořte nad raidem z předchozího úkolu LVM, skupina se bude jmenovat data a
+svazek share.
+----------------------
+apt install lvm2
+vgcreate data /dev/md0
+vgdisplay
+lvcreate -L 396M -n share data
+lvdisplay
+----------------------
+
+
+Naformátujte tento nově vytvořený svazek jako EXT4 a připojte ho do /home. Nastavte
+systém tak, aby tato složka byla připojena i po startu systému a to pomocí názvu
+naformátovaného svazku.
+------------------
+mkfs.ext4 /dev/data/share
+
+vim /etc/fstab
+EDIT:
+/dev/data/share	/home	/ext4	defaults	0	2
+
+mount -a
+lsblk -f
+e2label /dev/data/share share
+
+vim /etc/fstab
+EDIT:
+/dev/data/share -> LABEL=share
+------------------
