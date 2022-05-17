@@ -1,0 +1,71 @@
+apt install bind9
+cd /etc/bind
+
+cp db.empty db.test.spos
+vim db.test.spos
+
+# Pridam si nejakou IP 
+ip a a 10.0.1.40 dev (device)
+# jmeno device zjistis pomoc "ip a"
+
+# Pridam IP do /etc/hosts
+127.0.0.1	localhost
+10.0.1.40	test.spos
+
+
+# Upravim BACHA NA TY TECKY
+# @       IN      SOA     localhost. root.localhost -> IN      SOA     test.spos. root.test.spos.
+
+# Pridam toto BACHA NA TY TECKY
+test.spos.              IN      A               10.0.1.40
+mail                    IN      A               10.0.1.40
+posta                    IN      A               10.0.1.40
+test.spos.              IN      NS              test.spos.
+mail                    IN      MX      6       mail
+posta                    IN      MX      6       posta
+
+# Posledni uprava
+vim named.conf.local
+zone "test.spos" {
+	type master;
+	file "/etc/bind/db.test.spos";
+	allow-transfer {"any";};
+};
+
+# Kdyz bude treba reverzni zaznam (verejna IP)
+
+cp db.empty db.test.spos.rev
+vim db.test.spos.rev
+
+zone "1.0.10.in-addr.arpa" {
+  type master;
+  file "/etc/bind/db.test.spos.rev";
+  allow-transfer {10.0.1.0/24;};
+};
+
+Testovani:
+
+# Funguje DNS?
+host -t ANY test.spos
+# Melo by byt:
+test.spos name server test.spos.
+test.spos has SOA record test.spos. root.localhost. 4 604800 86400 2419200 86400
+test.spos has address 10.0.1.40
+
+# Funguje pošta?
+host -t ANY mail.test.spos
+# Melo by byt:
+mail.test.spos mail is handled by 6 mail.test.spos.
+mail.test.spos has address 10.0.1.40
+
+# Funguje reverzni zaznam?
+dig -x  10.0.1.40
+
+# Melo by byt:
+;; AUTHORITY SECTION:
+1.0.10.in-addr.arpa.	86400	IN	SOA	test.spos. root.test.spos. 1 604800 86400 2419200 86400
+
+nebo
+
+host -t ANY 1.0.10.in-addr.arpa
+
