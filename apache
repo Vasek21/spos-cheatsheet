@@ -1,0 +1,53 @@
+apt-get install apache2 php php-mysql
+
+Pro php
+apt-get install libapache2-mod-php5
+apt-get install php5-mysql (obsahuje mysqli modul do php)
+
+# Pridam port
+vim /etc/apache2/ports.conf
+Listen 80
+Listen 8181
+
+# Vytvorim hosta
+cd /etc/apache2/sites-avalible
+cp 000-default.conf 8181.conf
+vim 8181.conf
+
+# Tohle uprav
+<VirtualHost 10.0.0.15:8888>
+  ServerName test.spos
+  DocumentRoot /var/www/test8888
+</VirtualHost>
+
+# udelam index pro hosta
+mkdir/var/www/test8888
+vim /var/www/test8888
+
+# sem dam cislo portu nebo nejaky phpcko
+-> "<h1>BEZI</h1><?php phpinfo(); ?>"
+
+nebo
+
+<?php
+  phpinfo();
+?>
+
+
+a2ensite 8181.conf
+systemctl restart apache2
+
+# Disable php info (pridam na konec)
+sudo vim /etc/php/7.4/apache2/php.ini
+disable_functions = ...,phpinfo,
+
+Kontrola
+
+# Bezi apache?
+sudo netstat -tupln | grep apache
+tcp6       0      0 :::80                   :::*                    NASLOUCHÁ  34361/apache2       
+tcp6       0      0 :::8181                 :::*                    NASLOUCHÁ  34361/apache2       
+tcp6       0      0 :::8282                 :::*                    NASLOUCHÁ  34361/apache2   
+
+# Vraci spravna data?
+curl 10.0.1.40:8181
