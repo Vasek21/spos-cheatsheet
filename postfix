@@ -1,0 +1,51 @@
+apt install postfix
+  - Instalovat jako Internetový počítač
+  - zadat mail.test.spos
+ 
+# upravim
+vim /etc/postfix/main.cf
+myhostname = mail.test.spos
+
+
+# Bacha useradd dela i home, ale adduser home nevytvari
+adduser user1
+adduser user1
+
+# pridam prava na mail
+usermod -g mail user1
+usermod -g mail user2
+
+# Vytvortim novej soubor
+vim /etc/postfix/virtual
+hostmaster@mail.test.spos user1@localhost
+webmaster@posta.test.spos user2@localhost
+
+# Na konec /etc/postfix/main.cf pridam
+virtual_alias_domains = mail.test.spos posta.test.spos
+virtual_alias_maps = hash:/etc/postfix/virtual
+
+postmap /etc/postfix/virtual
+systemctl restart postfix
+
+apt install bsd-mailx
+apt install mutt
+echo "TEXT" | mail -s "PREDMET" hostmaster@mail.test.spos
+echo "TEXT" | mail -s "PREDMET" webmaster@posta.test.spos
+mutt -f /var/spool/mail/user1
+mutt -f /var/spool/mail/user2
+
+POP3 Commandy:
+
+nc localhost 110
+○ zadání uživatele
+USER user1
+○ zadání hesla
+PASS heslo
+○ počet zpráv
+STAT
+○ seznam zpráv
+LIST
+○ zobrazení zprávy 1
+RETR 1
+○ odhlášení se
+QUIT
