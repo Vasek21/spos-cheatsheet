@@ -1,21 +1,29 @@
+# -- INSTALACE BALICKU -- 
 apt install postfix
   - Instalovat jako Internetový počítač
   - zadat mail.test.spos
- 
-# upravim
+  
+apt install mutt bsd-mailx
+
+# Overeni ze DNS funguje
+host -t MX mail.test.spos localhost
+
+# 1. -- KONFIGURACE -- 
 vim /etc/postfix/main.cf
 myhostname = mail.test.spos
 
+vim /etc/aliases
+hostmaster: user1
+webmaster: user2
+---
+# pouze pro MostMail
+postconf -e "home_mailbox = Maildir/"
+---
 
-# Bacha useradd dela i home, ale adduser home nevytvari
-adduser user1
-adduser user1
+newaliases
+systemctl restart postfix
 
-# pridam prava na mail
-usermod -g mail user1
-usermod -g mail user2
-
-# Vytvortim novej soubor
+# -------------- Virtual hosti ------------
 vim /etc/postfix/virtual
 hostmaster@mail.test.spos user1@localhost
 webmaster@posta.test.spos user2@localhost
@@ -25,27 +33,76 @@ virtual_alias_domains = mail.test.spos posta.test.spos
 virtual_alias_maps = hash:/etc/postfix/virtual
 
 postmap /etc/postfix/virtual
+newaliases
 systemctl restart postfix
+-------------------------------------------------------------------
 
-apt install bsd-mailx
-apt install mutt
-echo "TEXT" | mail -s "PREDMET" hostmaster@mail.test.spos
-echo "TEXT" | mail -s "PREDMET" webmaster@posta.test.spos
+# 2. -- PRIPRAVENI UZIVATELU -----------------
+# Bacha useradd dela i home, ale adduser home nevytvari
+adduser user1
+adduser user1
+
+# pridam prava na mail
+usermod -g mail user1
+usermod -g mail user2
+
+# 3. -------- odeslani mailu ------------------
+echo "HOSTMASTER JE USER1" | mail -s "Hostmaster mail" hostmaster@mail.test.spos
+echo "WEBMASTER JE USER2" | mail -s "Webmaster mail" webmaster@posta.test.spos
+
+# Pro MailBox
 mutt -f /var/spool/mail/user1
 mutt -f /var/spool/mail/user2
 
-POP3 Commandy:
+# Pro maildir
+su -u user2
+cat /home/user2/Maildir/new/*
+
+
+# -------- Generovani certifikatu ------
+openssl req -new -x509 -nodes -out "/etc/ssl/certs/dovecot.pem" -keyout "/etc/ssl/private/dovecot.pem"
+vim /etc/dovecot/conf.d/10-ssl.conf
+ssl = yes
+ssl_cert = </etc/ssl/certs/dovecot.pem
+ssl_key = </etc/ssl/private/dovecot.pem
+# -------------------
+
+
+# Zobrazeni certifikatu
+less /etc/ssl/private/dovecot.pem
+less /etc/ssl/certs/dovecot.pem
+
+
+# -- IMAP COMMANDY -- 
+apt install dovecot-imapd
+nc localhost 143
+a login user1 heslo
+a list "" "*"
+a status inbox (messages)
+a examine inbox
+a fetch 1 body[]
+a logout
+
+
+
+# -- POP3 Commandy --- 
+apt install dovecot-pop3d
 
 nc localhost 110
-○ zadání uživatele
 USER user1
-○ zadání hesla
 PASS heslo
-○ počet zpráv
 STAT
-○ seznam zpráv
 LIST
-○ zobrazení zprávy 1
 RETR 1
-○ odhlášení se
 QUIT
+
+
+
+#---OMEZENI POSTY---
+
+# nesifrovany IMAP -> POP3 --dport 110
+iptables -A INPUT -s 10.0.2.0/24 -p tcp --dport 143 -j ACCEPT
+iptables -A INPUT -p tcp --dport 143 -j DROP
+#sifrovany IMAP -> POP3S --dport 995
+iptables -A INPUT -s 147.228.0.0/16 -p tcp --dport 993 -j ACCEPT
+iptables -A INPUT -p tcp --dport 993 -j DROP
