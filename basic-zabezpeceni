@@ -1,0 +1,20 @@
+# Zakazani rootovi se pripojit, povolit pouze klice
+
+vim /etc/ssh/sshd_config
+PermitRootLogin [no/yes/without-password] # zakazat prihlaseni na roota
+PasswordAuthentication no # povolit prihlaseni heslem
+
+service sshd restart
+
+# POVOLENI SSH POUZE ZE SITI UNIVERZITY
+
+iptables -A INPUT -s 147.228.0.0/16 -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j DROP
+
+more /var/log/auth.log
+
+# ZAMEZENI HADANI HESEL
+apt install fail2ban
+systemctl status fail2ban
+
+cat /etc/fail2ban/jail.conf
