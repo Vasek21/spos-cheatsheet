@@ -1,9 +1,5 @@
 apt-get install apache2 php php-mysql
 
-Pro php
-apt-get install libapache2-mod-php5
-apt-get install php5-mysql (obsahuje mysqli modul do php)
-
 # Pridam port
 vim /etc/apache2/ports.conf
 Listen 80
@@ -24,11 +20,7 @@ vim 8181.conf
 mkdir/var/www/test8888
 vim /var/www/test8888
 
-# sem dam cislo portu nebo nejaky phpcko
--> "<h1>BEZI</h1><?php phpinfo(); ?>"
-
-nebo
-
+PHP INFO TEST:
 <?php
   phpinfo();
 ?>
@@ -39,6 +31,7 @@ systemctl restart apache2
 
 # Disable php info (pridam na konec)
 sudo vim /etc/php/7.4/apache2/php.ini
+#sudo vim /etc/php/8.1/apache2/php.ini
 disable_functions = ...,phpinfo,
 
 Kontrola
