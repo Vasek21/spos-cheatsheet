@@ -1,0 +1,27 @@
+apt install nginx
+
+vim /etc/nginx/sites-available/default
+
+upstream spos {
+  server localhost:8181;
+  server localhost:8282;
+}
+server {
+  listen 443 ssl;
+  server_name test.spos;
+  ssl on;
+  ssl_certificate /etc/nginx/ssl/server.crt;
+  ssl_certificate_key /etc/nginx/ssl/server.key;
+location / {
+  proxy_pass http://spos;
+  }
+}
+
+cd /etc/nginx
+mkdir ssl
+cd ssl
+
+systemctl restart nginx
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+curl --insecure https://localhost
