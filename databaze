@@ -1,0 +1,99 @@
+● Přidání IP adresy
+  ip a a 10.0.0.15 dev enp0s3
+● Instalace MySQL serveru
+  apt install mysql-server
+● Přihlášení se
+  mysql -uroot -pheslo
+● Vytvoření uživatele spos
+  CREATE USER 'spos'@'10.0.0.15' IDENTIFIED BY 'spos';
+● Vypsání uživatelů
+  SELECT host, user FROM mysql.user;
+● Vytvoření databáze spos
+  CREATE DATABASE spos;
+● Zobrazení existujících databází
+#SHOW DATABASES;
+● Udělení oprávnění uživateli spos k databázi spos
+  GRANT ALL PRIVILEGES ON spos.* TO 'spos'@10.0.0.15;
+○ Aplikování oprávnění
+  FLUSH PRIVILEGES;
+#○ Zobrazení oprávnění uživatele spos
+#SHOW GRANTS FOR ‘spos’@10.0.0.15
+● Změna adresy poslechu
+  vim /etc/mysql/my.cf
+  
+  [mysqld]
+  bind-address = 10.0.0.15
+  
+● Restartování služby MySQL
+  service mysql restart
+● Přihlášení se jako uživatel spos
+  mysql -h10.0.0.15 -uspos -pspos
+  
+---- NAPLNENI TABULKY --- 
+ USE spos;
+ 
+  CREATE TABLE skore(
+id INT(6) AUTO_INCREMENT PRIMARY KEY,
+jmeno VARCHAR(64),
+datum DATETIME,
+skore INT(8));
+
+vim fill.sh
+
+for i in `seq 1 30`; do echo "INSERT INTO skore VALUES(null,'Jarda',now(),$i)" |
+mysql -h10.0.0.15 -uspos -pspos spos; done
+
+sh fill.sh
+SELECT * FROM skore;
+
+# ---- postgres ----
+apt install postgresql postgresql-client
+find /etc -name postgresql.conf
+vim ^
+
+port = 3333
+listen_addresses='10.0.0.57'
+
+service postgresql restart
+
+adduser spos
+su - postgres
+createuser --pwprompt spos
+createdb -O spos spos
+
+vim /etc/postgresql/12/main/pg_hba.conf
+#TYPE   DB  USER  ADDRESS   METHOD
+host  all   spos  10.0.0.0/16   md5
+
+service postgresql restart
+
+su - spos
+
+psql -d databaze -h 10.0.0.15 -p 3333 -U spos
+
+CREATE TABLE datum( id serial PRIMARY KEY, hodnota timestamp default NULL );
+---- naplneni db ----
+
+vim skript.sh
+
+#!/bin/bash
+echo "Vkladam zaznam do databaze ..." `date`
+echo "INSERT INTO datum(hodnota) VALUES (now())" | psql spos
+
+chmod u+x skript.sh
+sh skript.sh
+
+
+# --- vypsani tabulky v php ----
+<?php
+  $conn = new mysqli("10.0.0.15","spos","spos","spos","3306");
+  $sql = "SELECT * FROM skore ORDER BY skore DESC";
+  $result = $conn->query($sql);
+  if($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+      echo $row["skore"]." ";
+    }
+  }
+  $conn->close();
+?>
+
