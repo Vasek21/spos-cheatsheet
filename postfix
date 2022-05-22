@@ -11,6 +11,7 @@ host -t MX mail.test.spos localhost
 # 1. -- KONFIGURACE -- 
 vim /etc/postfix/main.cf
 myhostname = mail.test.spos
+mydestination = mailt.test.spos, posta.test.spos
 
 vim /etc/aliases
 hostmaster: user1
