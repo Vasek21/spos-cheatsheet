@@ -10,19 +10,21 @@ ip a a 10.0.1.40 dev (device)
 
 # Pridam IP do /etc/hosts
 127.0.0.1	localhost
-10.0.1.40	test.spos
+127.0.0.1	test.spos
+#10.0.1.40	test.spos
 
 
 # Upravim BACHA NA TY TECKY
 # @       IN      SOA     localhost. root.localhost -> IN      SOA     test.spos. root.test.spos.
 
 # Pridam toto BACHA NA TY TECKY
-test.spos.              IN      A               10.0.1.40
-mail                    IN      A               10.0.1.40
-posta                    IN      A               10.0.1.40
-test.spos.              IN      NS              test.spos.
+@       IN      NS      localhost.
+@       IN      A       127.0.0.1
+mail                    IN      A               127.0.0.1
+posta                    IN      A               127.0.0.1
 mail                    IN      MX      6       mail
 posta                    IN      MX      6       posta
+
 
 # Posledni uprava
 vim named.conf.local
