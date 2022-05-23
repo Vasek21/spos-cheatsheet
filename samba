@@ -29,3 +29,35 @@ vim /etc/fstab
 smbpasswd -a pepa         -> přidá do samby pepu (musí být v systému)
 addgroup --gid 6001 cifs  -> vytvoří skupinu
 usermod -G cifs pepa      -> přidá pepu do skupiny
+
+
+
+
+
+*********NFS*******
+
+
+apt install nfs-server
+
+addgroup --gid 6000 nfs_share
+adduser --gid 6000 --uid 6000 nfs_share
+
+chown nfs_share:nfs_share /opt/share
+vim /etc/exports
+  /opt/share 10.0.2.0/24(rw,no_subtree_check,all_squash,anonuid=6000,anongid=6000)    
+  
+exportfs -a
+mkdir /share
+chmod 777 share
+
+vim /etc/fstab
+  10.0.2.15:/opt/share /share nfs defaults 0 2
+  
+mount -a
+
+cat /proc/mounts | grep share
+
+OVĚŘENÍ FUNKČNOSTI
+cd /share
+touch soubor.txt
+ls -la
