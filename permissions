@@ -1,0 +1,10 @@
+OWNER GROUP ALL_USERS
+
+0 -> no permissions
+1 -> execute          (-x)
+2 -> write            (-w-)
+3 -> execute + write  (-wx)
+4 -> read             (r-)
+5 -> read + execute   (r-x)
+6 -> read + write     (rw-)
+7 -> all              (rwx)
