@@ -1,0 +1,31 @@
+apt install samba smbclient cifs-utils
+vim /etc/samba/smb.conf
+
+
+[SHARED]
+  comment = comment   
+  path = /opt/share        -> kterou složku sdílim
+  writable = no            -> read only (může být i: read only = yes)
+  create mask = 0777       -> maska práv soouborů
+  directory mask = 0777    -> maska práv adresářů
+  force user = nobody      -> specifikuje uživatele, za kterého každá na sdíleném disku vystupuje (defaultně nemusí být uvedeno)
+  force group = nogroup    -> to stejný akorát s group + force group přepisuje force user (defaultně nemusí být uvedeno)
+  guest ok = yes           -> if yes - nevyžaduje heslo
+
+  #hosts allow = 127.0.0.1 192.168.2.0/24 192.168.3.0/24  -> specifikuje sítě, ze ktrých je možno se připojit
+  #hosts deny = 0.0.0.0/0  -> zakázané sítě
+  
+  
+  
+service smbd restart
+mkdir /mnt/share
+
+*Pokud chce sdílenou složku namountovat
+mount -t cifs //10.0.2.15/SHARED /mnt/share -o guest
+vim /etc/fstab
+//10.0.2.15/SHARED /mnt/share cifs guest,uid=nobody,noperm 0 2
+
+*V případě, že chce aby uživatele vystupovali jako jeden (force group)
+smbpasswd -a pepa         -> přidá do samby pepu (musí být v systému)
+addgroup --gid 6001 cifs  -> vytvoří skupinu
+usermod -G cifs pepa      -> přidá pepu do skupiny
