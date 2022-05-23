@@ -24,7 +24,7 @@ svazek share.
 apt install lvm2
 vgcreate data /dev/md0
 vgdisplay
-lvcreate -L 396M -n share data
+lvcreate -L 396M -n share data   |  (lvcreate -l 100%FREE -n share data)  -> využije všechno místo
 lvdisplay
 ----------------------
 
