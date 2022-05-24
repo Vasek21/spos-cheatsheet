@@ -16,6 +16,8 @@ vim /etc/samba/smb.conf
   #hosts deny = 0.0.0.0/0  -> zakázané sítě
   
   
+*Vypsání všech sdílení
+smbclient -L localhost
   
 service smbd restart
 mkdir /mnt/share
