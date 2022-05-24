@@ -1,6 +1,8 @@
 apt install samba smbclient cifs-utils
 vim /etc/samba/smb.conf
 
+mkdir /opt/share
+!!! chmod 777 /opt/share !!!
 
 [SHARED]
   comment = comment   
@@ -16,13 +18,15 @@ vim /etc/samba/smb.conf
   #hosts deny = 0.0.0.0/0  -> zakázané sítě
   
   
+service smbd restart
+
 *Vypsání všech sdílení
 smbclient -L localhost
-  
-service smbd restart
-mkdir /mnt/share
+
 
 *Pokud chce sdílenou složku namountovat
+mkdir /mnt/share
+!!! chmod 777 /mnt/share !!!
 mount -t cifs //10.0.2.15/SHARED /mnt/share -o guest
 vim /etc/fstab
 //10.0.2.15/SHARED /mnt/share cifs guest,uid=nobody,noperm 0 2
