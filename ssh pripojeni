@@ -1,3 +1,3 @@
 # ve slozce, kde mam ssh klic (id_ecdsa)
-chmod 644 id_ecdsa
+chmod 700 id_ecdsa
 ssh -i id_ecdsa spos@simava-lin-exam.spos.sgfl.xyz
