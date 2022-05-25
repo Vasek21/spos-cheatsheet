@@ -1,3 +1,10 @@
 # ve slozce, kde mam ssh klic (id_ecdsa)
 chmod 700 id_ecdsa
 ssh -i id_ecdsa spos@simava-lin-exam.spos.sgfl.xyz
+
+
+ssh-keygen -t rsa -b 4096 -C "jindra@spos"
+ssh-agent | eval `ssh-agent`
+ssh-add
+ssh-copy-id
+cat ~/.ssh/authorized_keys
