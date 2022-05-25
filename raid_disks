@@ -1,9 +1,15 @@
+setxkbmap cz
+
+
 Nastavte v linuxu raid5 ze všech dostupných disků.
 
 Vytváření
 -----------
 apt install mdadm
 mdadm -Cv /dev/md0 -l5 -n3 /dev/sd[bcd]
+
+mdadm --create /dev/md0 -l 1 -n 2 /dev/sda1 missing
+
 mdadm --detail /dev/md0
 
 
