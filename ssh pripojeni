@@ -11,3 +11,7 @@ cat ~/.ssh/authorized_keys
 
 
 /etc/resolv.conf
+
+/etc/network/interfaces
+auto enp0s3
+iface enp0s3 inet dhcp
