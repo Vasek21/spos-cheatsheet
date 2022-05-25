@@ -8,3 +8,6 @@ ssh-agent | eval `ssh-agent`
 ssh-add
 ssh-copy-id
 cat ~/.ssh/authorized_keys
+
+
+/etc/resolv.conf
