@@ -43,7 +43,7 @@ mkfs.ext4 /dev/data/share
 
 vim /etc/fstab
 EDIT:
-/dev/data/share	/home	/ext4	defaults	0	2
+/dev/data/share	/dev/data/share ext4	defaults	0	2
 
 mount -a
 lsblk -f
