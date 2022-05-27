@@ -48,7 +48,7 @@ apt install nfs-server
 addgroup --gid 6000 nfs_share
 adduser --gid 6000 --uid 6000 nfs_share
 
-chown nfs_share:nfs_share /opt/share
+chown nfs_share:nfs_share /opt/share      ->  když nechce aby vystupuvali jako jeden user: sudo chown nobody:nogroup /opt/share 
 vim /etc/exports
   /opt/share 10.0.2.0/24(rw,no_subtree_check,all_squash,anonuid=6000,anongid=6000)    
   
