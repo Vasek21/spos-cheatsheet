@@ -64,6 +64,7 @@ createdb -O spos spos
 vim /etc/postgresql/12/main/pg_hba.conf
 #TYPE   DB  USER  ADDRESS   METHOD
 host  all   spos  10.0.0.0/16   md5
+!!!   POKUD NESPECIFIKUJE IP ADRESU, PŘES KTEROU SE PŘIHLAŠUJEME JE POTŘEBA ZMĚNIT ŘÁDEK: "local   all   postgres   peer"    NA:  "local   all   postgres   md5" !!!
 
 service postgresql restart
 
@@ -71,14 +72,14 @@ su - spos
 
 psql -d databaze -h 10.0.0.15 -p 3333 -U spos
 
-CREATE TABLE datum( id serial PRIMARY KEY, hodnota timestamp default NULL );
+CREATE TABLE datum( id serial PRIMARY KEY, hodnota timestamp default NULL );        další možné záznamy:  name character(50) NOT NULL, cislo integer, username VARCHAR(50) UNIQUE NOT NULL
 ---- naplneni db ----
 
 vim skript.sh
 
 #!/bin/bash
 echo "Vkladam zaznam do databaze ..." `date`
-echo "INSERT INTO datum(hodnota) VALUES (now())" | psql spos
+echo "INSERT INTO datum(hodnota) VALUES (now())" | psql spos  	      -> stringy je nutno psát do apostrofů !!!
 
 chmod u+x skript.sh
 sh skript.sh
