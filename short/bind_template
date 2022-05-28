@@ -1,0 +1,28 @@
+@				IN      NS      test.spos.
+@       IN      A       127.0.0.1					
+mail    IN      A       127.0.0.1		
+posta   IN      A       127.0.0.1		
+@       IN      MX      6       mail
+@       IN      MX      6       posta
+
+zone "test.spos" {
+      type master;
+      file "/etc/bind/db.test.spos";
+      allow-transfer {"any";};
+};
+
+
+
+
+@				IN      NS      spos.sgfl.xyz.
+@       IN      A       127.0.0.1					
+mx-a.sgfl.xyz.    IN      A       127.0.0.1		
+mx-b.sgfl.xyz.   IN      A       127.0.0.1		
+@       IN      MX      6       mx-a.sgfl.xyz.
+@       IN      MX      6       mx-b.sgfl.xyz.
+
+zone "spos.sgfl.xyz" {
+        type master;
+        file "/etc/bind/db.spos.sgfl.xyz";
+        allow-transfer {"any";};
+};
