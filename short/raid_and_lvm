@@ -1,0 +1,20 @@
+mdadm -Cv /dev/md0 -l5 -n3 /dev/sd[bc] missing
+vgcreate data /dev/md0
+lvcreate -L 396M -n share data 
+mkfs.ext4 /dev/data/share
+
+vim /etc/fstab
+/dev/data/share	/dev/data/share ext4	defaults	0	2
+mount -a
+
+---------label----------
+e2label /dev/data/share share
+vim /etc/fstab
+/dev/data/share -> LABEL=share
+mount -a
+------------------
+
+
+lsblk -f
+mdadm --detail /dev/md0
+lvs, vgs
