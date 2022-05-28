@@ -1,16 +1,16 @@
 mdadm -Cv /dev/md0 -l5 -n3 /dev/sd[bc] missing
 vgcreate data /dev/md0
-lvcreate -L 396M -n share data 
-mkfs.ext4 /dev/data/share
+lvcreate -L 396M -n shared data 
+mkfs.ext4 /dev/data/shared
 
 vim /etc/fstab
-/dev/data/share	/dev/data/share ext4	defaults	0	2
+/dev/data/shared   /opt/share  ext4     defaults        0       2
 mount -a
 
 ---------label----------
-e2label /dev/data/share share
+e2label /dev/data/shared shared
 vim /etc/fstab
-/dev/data/share -> LABEL=share
+/dev/data/shared -> LABEL=shared
 mount -a
 ------------------
 
