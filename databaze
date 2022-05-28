@@ -98,3 +98,15 @@ sh skript.sh
   $conn->close();
 ?>
 
+CREATE TABLE users(
+   id SERIAL PRIMARY KEY,
+   name VARCHAR(30) NOT NULL,
+   surname VARCHAR(30) NOT NULL,
+   email VARCHAR(50) NOT NULL,
+   date TIMESTAMP NOT NULL,
+   age INTEGER
+);
+
+INSERT into users (name,surname,email,date,age) VALUES ('pepa', 'novak', 'pepa@novak.cz', now(), 10);
+
+
