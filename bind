@@ -17,11 +17,12 @@ ip a a 10.0.1.40 dev (device)
 # Upravim BACHA NA TY TECKY
 # @       IN      SOA     localhost. root.localhost -> IN      SOA     test.spos. root.test.spos.
 
+(nebo IP adresa serveru)
 # Pridam toto BACHA NA TY TECKY
 @       IN      NS      test.spos.
-@       IN      A       127.0.0.1					(nebo IP adresa serveru)
-mail                    IN      A               127.0.0.1		(nebo IP adresa serveru)
-posta                    IN      A               127.0.0.1		(nebo IP adresa serveru)
+@       IN      A       127.0.0.1					
+mail                    IN      A               127.0.0.1		
+posta                    IN      A               127.0.0.1		
 @                    IN      MX      6       mail
 @                    IN      MX      6       posta
 
