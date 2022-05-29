@@ -46,7 +46,13 @@ addgroup --gid 6001 cifs  -> vytvoří skupinu
 usermod -G cifs pepa      -> přidá pepu do skupiny
 
 
+*OVĚŘENÍ FUNKČNOSTI
+musím mít v sambě vytvořeného usera
 
+smbclient //10.0.2.15/SHARED -U pepa
+mkdir pepa_folder
+control + c
+ls -al 
 
 
 *********NFS*******
