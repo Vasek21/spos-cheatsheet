@@ -1,6 +1,6 @@
 
 VŽDY
-apt install lvm2 mdadm apache2 php bind9 dnsutils
+apt install lvm2 mdadm apache2 php bind9 dnsutils net-tools curl
 
 DATABÁZE
 *Postgres
