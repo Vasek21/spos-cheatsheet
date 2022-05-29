@@ -74,6 +74,8 @@ less /etc/ssl/private/dovecot.pem
 less /etc/ssl/certs/dovecot.pem
 
 
+mutt -f imap://pepa:pepa@localhost:143/       -> otevření impau pomocí muttu
+
 # -- IMAP COMMANDY -- 
 apt install dovecot-imapd
 nc localhost 143
