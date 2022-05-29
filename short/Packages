@@ -4,7 +4,7 @@ apt install lvm2 mdadm apache2 php bind9 dnsutils
 
 DATABÁZE
 *Postgres
-apt install php-mysql postgresql postgresql-client
+apt install php-mysql postgresql postgresql-client php-pgsql
 
 *Mysql
 apt install php-mysql mariadb-server
