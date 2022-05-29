@@ -1,0 +1,24 @@
+
+VŽDY
+apt install lvm2 mdadm apache2 php bind9 dnsutils
+
+DATABÁZE
+*Postgres
+apt install php-mysql postgresql postgresql-client
+
+*Mysql
+apt install php-mysql mariadb-server
+
+
+SAMBA
+apt install samba smbclient cifs-utils
+
+NFS
+apt install nfs-server
+
+POSTFIX
+apt install postfix mutt bsd-mailx dovecot-imapd dovecot-pop3d
+
+
+NGINX
+apt install nginx
