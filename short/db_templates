@@ -19,7 +19,7 @@ INSERT into users (name,surname,email,date,age) VALUES ('pepa', 'novak', 'pepa@n
   $result = $conn->query($sql);
   if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-      echo $row["age"]." ";
+      echo $row["age"]."\n";
     }
   }
   $conn->close();
