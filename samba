@@ -16,6 +16,7 @@ mkdir /opt/share
 
   #hosts allow = 127.0.0.1 192.168.2.0/24 192.168.3.0/24  -> specifikuje sítě, ze ktrých je možno se připojit
   #hosts deny = 0.0.0.0/0  -> zakázané sítě
+  #valid users = pepa
 
 [SHARED]
   comment = comment   
