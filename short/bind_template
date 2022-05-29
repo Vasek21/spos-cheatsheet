@@ -26,3 +26,6 @@ zone "spos.sgfl.xyz" {
         file "/etc/bind/db.spos.sgfl.xyz";
         allow-transfer {"any";};
 };
+
+
+www   IN    A     127.0.0.1
