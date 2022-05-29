@@ -29,3 +29,4 @@ zone "spos.sgfl.xyz" {
 
 
 www   IN    A     127.0.0.1
+@     IN    txt   mam rad spos
