@@ -16,7 +16,16 @@ mkdir /opt/share
 
   #hosts allow = 127.0.0.1 192.168.2.0/24 192.168.3.0/24  -> specifikuje sítě, ze ktrých je možno se připojit
   #hosts deny = 0.0.0.0/0  -> zakázané sítě
-  
+
+[SHARED]
+  comment = comment   
+  path = /opt/share       
+  writable = no            
+  create mask = 0777       
+  directory mask = 0777    
+  force user = nobody      
+  force group = nogroup    
+  guest ok = yes           
   
 service smbd restart
 
