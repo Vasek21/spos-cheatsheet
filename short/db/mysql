@@ -1,0 +1,22 @@
+ mysql
+ CREATE USER 'spos_data' IDENTIFIED BY 'Heslo123.';
+ CREATE DATABASE spos_data;
+ GRANT ALL PRIVILEGES ON spos_data.* TO 'spos_data';
+ FLUSH PRIVILEGES;
+ 
+
+-- Pouze na spec. adrese a portu --  
+  vim /etc/mysql/my.cf
+  [mysqld]
+  bind-address = 10.0.0.15
+  port=2222
+  
+ mysql
+ CREATE USER 'spos_data'@10.0.0.15 IDENTIFIED BY 'Heslo123.';
+ CREATE DATABASE spos_data;
+ GRANT ALL PRIVILEGES ON spos_data.* TO 'spos_data'@10.0.0.15;
+ FLUSH PRIVILEGES;
+ 
+  
+SELECT host, user FROM mysql.user;
+ mysql -uspos_data -pHeslo123.
