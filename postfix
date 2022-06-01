@@ -38,6 +38,13 @@ newaliases
 systemctl restart postfix
 -------------------------------------------------------------------
 
+/etc/dovecot/conf.d/10-mail.conf
+mail_location = maildir:~/Maildir
+mail_location = mbox:~/mail:INBOX=/var/mail/%u
+
+mutt -f imap://pepa:pepa@localhost:143/       -> otevření impau pomocí muttu
+RESTARTUJ DOVECOTA
+
 # 2. -- PRIPRAVENI UZIVATELU -----------------
 # Bacha useradd dela i home, ale adduser home nevytvari
 adduser user1
@@ -72,9 +79,6 @@ ssl_key = </etc/ssl/private/dovecot.pem
 # Zobrazeni certifikatu
 less /etc/ssl/private/dovecot.pem
 less /etc/ssl/certs/dovecot.pem
-
-
-mutt -f imap://pepa:pepa@localhost:143/       -> otevření impau pomocí muttu
 
 # -- IMAP COMMANDY -- 
 apt install dovecot-imapd
