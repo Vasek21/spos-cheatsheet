@@ -3,7 +3,6 @@ a2ensite default-ssl.conf
 
 htpasswd -c /etc/apache2/.htpasswd venca
 
-:qii
 Redirect  / https://firma.spos:8282
 <Location />
   AuthName "Private"
@@ -14,3 +13,20 @@ Redirect  / https://firma.spos:8282
 
 
 curl -k https://venca@venca:localhost:446 
+
+
+
+upstream spos {
+  server firma.spos:8181;
+  server  spolecnost.spos:8282;
+}
+
+
+location /save {
+  proxy_pass https://localhost:445/;
+}
+
+
+location /balance {
+  proxy_pass http://spos/;
+}
