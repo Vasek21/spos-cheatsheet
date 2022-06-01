@@ -4,6 +4,11 @@ vim /etc/samba/smb.conf
 mkdir /opt/share
 !!! chmod 777 /opt/share !!!
 
+*Pokud chce sdílenou složku namountovat
+mkdir /mnt/share
+!!! chmod 777 /mnt/share !!!
+
+
 [SHARED]
   comment = comment   
   path = /opt/share        -> kterou složku sdílim
@@ -34,10 +39,11 @@ service smbd restart
 smbclient -L localhost
 
 
-*Pokud chce sdílenou složku namountovat
-mkdir /mnt/share
-!!! chmod 777 /mnt/share !!!
 mount -t cifs //10.0.2.15/SHARED /mnt/share -o guest
+mount -t cifs //10.0.2.15/SHARED /mnt/share -o username=karel
+
+
+
 vim /etc/fstab
 //10.0.2.15/SHARED /mnt/share cifs guest,uid=nobody,noperm 0 2
 
