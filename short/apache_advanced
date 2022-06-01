@@ -1,6 +1,9 @@
+a2enmod ssl
+a2ensite default-ssl.conf
+
 htpasswd -c /etc/apache2/.htpasswd venca
 
-
+:qii
 Redirect  / https://firma.spos:8282
 <Location />
   AuthName "Private"
