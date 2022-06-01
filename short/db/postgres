@@ -1,0 +1,24 @@
+
+
+adduser spos
+su - postgres
+createuser --pwprompt spos
+createdb -O spos spos
+
+psql -d spos_db -h localhost -U spos -p 5432
+
+
+---- úprava portů ----- 
+find /etc -name postgresql.conf
+vim ^
+
+port = 3333
+listen_addresses='10.0.0.57'
+
+vim /etc/postgresql/12/main/pg_hba.conf
+#TYPE   DB  USER  ADDRESS   METHOD
+host  all   spos  10.0.0.0/16   md5
+service postgresql restart
+--------------------------------
+
+
