@@ -1,0 +1,13 @@
+htpasswd -c /etc/apache2/.htpasswd venca
+
+
+Redirect  / https://firma.spos:8282
+<Location />
+  AuthName "Private"
+  AuthType Basic
+  AuthUserFile /etc/apache2/.htpasswd
+  Require user venca
+</Location>
+
+
+curl -k https://venca@venca:localhost:446 
